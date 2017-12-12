@@ -1,0 +1,163 @@
+body{
+	padding: 0;
+	margin: 0;
+	font-family: 'Open Sans', 'Roboto', sans-serif;
+	font-size: 13px;
+	background-color: #393d45;
+	color: #f5f5f5;
+}
+h1,h2,h3,h4,h5,h6{
+	margin: 0.3em 0;
+}
+
+.hero{
+	text-align: center;
+	background-color: #282c34;
+	padding: 20px 0;
+	margin: 0 0 12px 0;
+}
+
+.hero img{
+	width: 310px;
+}
+
+.page{
+	padding: 0 20px 60px;
+}
+
+.hidden{
+	display: none;
+}
+
+h3.name{
+	display: inline-block;
+}
+
+h5.subname {
+	color: #8b9;
+	font-weight: 400;
+	display: inline-block;
+	float: right;
+}
+
+.block-container{
+	margin: 4px 0;
+}
+
+.block{
+	display: inline-block;
+	margin: 4px;
+	width: 40px;
+	height: 20px;
+	border-radius: 2px;
+}
+
+div.block.success-block{
+	background-color: #2ecf68;
+}
+div.block.failure-block{
+	background-color: #c14;
+}
+
+p.small {
+	margin: 0 0 20px;
+	opacity: 0.5;
+	font-size: 11px;
+}
+
+.single-trainee {
+	margin-bottom: 12px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid #aaa;
+}
+
+.single-trainee:last-of-type{
+	border: 0;
+}
+
+.fail-container {
+	font-size: 12px;
+	line-height: 1.45em;
+	margin: 12px 4px 4px;
+	background-color: #362f2f;
+	overflow: auto;
+	border: 1px solid #433;
+	border-radius: 2px;
+}
+
+.single-failure.closed{
+	border-bottom: 1px solid #625a5a;
+}
+.single-failure.closed .failure-details,
+.single-failure.closed .longFileName{
+	display: none;
+}
+
+.failure-details{
+	padding-bottom: 12px;
+}
+
+button.toggle {
+	padding: 3px 8px 5px 8px;
+	position: absolute;
+	right: 38px;
+	margin-top: 10px;
+	height: 22px;
+	font-size: 12px;
+	border-radius: 2px;
+	background-color: #fbf7f7;
+	border: 0;
+	outline: 0;
+	cursor: pointer;
+}
+
+button.toggle:hover{
+	background-color: #fff;
+}
+
+button.toggle:active{
+	background-color: #fbd8d8;
+}
+
+p.filename {
+	margin: 0;
+	font-size: 14px;
+	padding: 12px 12px 12px 42px;
+	background-color: #282424;
+	color: white;
+	min-width: 900px;
+	width: calc(100% - 54px);
+	letter-spacing: 0.05em;
+}
+
+p.longFileName {
+	margin: 4px 0 0 12px;
+}
+
+p.title{
+	font-size: 15px;
+}
+
+.badge {
+	position: absolute;
+	width: 22px;
+	height: 22px;
+	background-color: #c14;
+	text-align: center;
+	border-radius: 10px;
+	font-size: 11px;
+	font-weight: bold;
+	padding-top: 2px;
+	box-sizing: border-box;
+	margin: 9px 0 0 9px;
+}
+
+li.detail{
+	border-top: 1px dashed #7a7272;
+	padding-left: 15px;
+	margin-left: -15px;
+}
+
+li.detail:first-of-type{
+	border: 0;
+}
