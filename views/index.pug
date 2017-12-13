@@ -6,34 +6,6 @@ html
         div.hero
             img(src='/public/react-training-banner-clear.png')
         div.page
-            each trainee in trainees
-                div.single-trainee
-                    h3.name= trainee.name
-                    h5.subname= trainee.subname
-                    p.hidden= trainee.id
-                    p.small= trainee.lastRan
-                    div.block-container
-                        -var n = 0
-                        while n < trainee.numPassedTestSuites
-                            -n++
-                            div.block.success-block
-                    div.block-container
-                        -var n = 0
-                        while n < trainee.numFailedTestSuites
-                            -n++
-                            div.block.failure-block
-                    if trainee.failureDetails.length
-                        div.fail-container
-                            each failure in trainee.failureDetails
-                                div.single-failure.closed
-                                    button.toggle TOGGLE
-                                    div.badge= failure.details.length
-                                    p.filename= failure.fileName
-                                    p.small.longFileName= failure.longFileName
-                                    ol.failure-details
-                                        each detail in failure.details
-                                            li.detail
-                                                p.title= detail.title
-                                                pre.detail-message= detail.messages
+        script(type='text/javascript' src='/socket.io/socket.io.js')
         script(type='text/javascript' src='/public/script.js')
 
