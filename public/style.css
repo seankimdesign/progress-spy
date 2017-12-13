@@ -29,6 +29,10 @@ h1,h2,h3,h4,h5,h6{
 	display: none;
 }
 
+.transparent{
+	opacity: 0 !important;
+}
+
 h3.name{
 	display: inline-block;
 }
@@ -69,6 +73,8 @@ p.small {
 	margin-bottom: 12px;
 	padding-bottom: 12px;
 	border-bottom: 1px solid #aaa;
+	opacity: 1;
+	transition: opacity 0.8s ease-in;
 }
 
 .single-trainee:last-of-type{
