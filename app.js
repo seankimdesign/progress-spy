@@ -5,6 +5,9 @@ const cookieParser = require('cookie-parser')
 const config = require('./config.json')
 
 const app = express()
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
 const USE_PORT = 3000
 
 const txtRecent = 'About a minute ago'
@@ -19,12 +22,26 @@ let trainees = []
 
   app.set('view engine', 'pug')
 
-  app.get('/', (req, res)=>{
+  app.get('/', (req, res) => {
     recalculateRanTime(trainees)
-    res.render('index', {trainees})
+    res.render('index')
   })
 
-  app.post('/update/:id', (req, res)=>{
+  app.get('/api/trainees', (req, res) => {
+    res.json({trainees})
+  })
+
+  app.get('/invalidate/:id', (req, res) => {
+    let { cookies } = req
+    let { id } = req.params
+    if (cookies.react === config['authorization-cookie']) {
+      trainees = trainees.filter(trainee => trainee.id !== id)
+      return res.redirect('/')
+    }
+    res.send('<pre>Cannot GET /invalidate/' + id + '</pre>')
+  })
+
+  app.post('/update/:id', (req, res) => {
     const { body } = req
     const { id } = req.params
     const parsed = JSON.parse(body)
@@ -40,20 +57,14 @@ let trainees = []
     }
     let omitted = trainees.filter(trainee => trainee.id !== id)
     trainees = [...omitted, testResult]
+    recalculateRanTime(trainees)
+    io.emit('update', {
+      trainees
+    })
     res.send('OK')
   })
 
-  app.get('/invalidate/:id', (req, res) => {
-    let { cookies } = req
-    let { id } = req.params
-    if (cookies.react === config['authorization-cookie']){
-      trainees = trainees.filter(trainee => trainee.id !== id)
-      return res.redirect('/')
-    }
-    res.send('<pre>Cannot GET /invalidate/'+id+'</pre>')
-  })
-
-  app.listen(USE_PORT, ()=>{
+  http.listen(USE_PORT, ()=>{
     console.log(`Application started on port ${USE_PORT}`)
   })
 
