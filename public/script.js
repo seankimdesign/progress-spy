@@ -21,7 +21,7 @@ const createFailureBlock = failures => failures.reduce((acc, failure) => {
 }, '')
 
 const buildTraineeBlock = trainee => `
-  <div class="single-trainee">
+  <div class="single-trainee" id="${trainee.id}">
     <h3 class="name">${trainee.name}</h3>
     <h5 class="subname">${trainee.subname}</h5>
     <p class="hidden">${trainee.id}</p>
@@ -47,15 +47,19 @@ const buildTraineeBlock = trainee => `
     }
   })
 
-  // initial fetch
   fetch('/api/trainees').then((res) => res.json()).then((data) => {
     document.getElementsByClassName('page')[0].innerHTML = data.trainees.reduce((acc, trainee) => acc + buildTraineeBlock(trainee), '')
   })
 
-  // watch for changes
   const socket = io()
-  socket.on('update', (trainees) => {
-    // check for upddates
+  socket.on('update', (trainee) => {
+    if (document.getElementById(trainee.id)) {
+      document.getElementById(trainee.id).innerHTML = buildTraineeBlock(trainee.testResult)
+    } else {
+      var e = document.createElement('div')
+      e.innerHTML = buildTraineeBlock(trainee.testResult)
+      document.getElementsByClassName('page')[0].appendChild(e.firstElementChild)
+    }
   })
 
 })()

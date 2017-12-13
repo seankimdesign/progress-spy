@@ -59,7 +59,8 @@ let trainees = []
     trainees = [...omitted, testResult]
     recalculateRanTime(trainees)
     io.emit('update', {
-      trainees
+      id,
+      testResult
     })
     res.send('OK')
   })
