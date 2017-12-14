@@ -1,6 +1,7 @@
 ;(()=>{
 
   let openedState = {}
+  let speech, voices = null
 
   document.addEventListener('click', e => {
     if (e.target.className === 'toggle') {
@@ -24,14 +25,28 @@
     pageElement.innerHTML = data.trainees.reduce((acc, trainee) => acc + buildTraineeBlock(trainee), '')
   })
 
+  if ('speechSynthesis' in window) {
+    speech = new SpeechSynthesisUtterance();
+    voices = window.speechSynthesis.getVoices();
+    speech.voice = voices[10];
+    speech.voiceURI = 'native';
+    speech.volume = 0.8; // 0 to 1
+    speech.rate = 0.9; // 0.1 to 10
+    speech.pitch = 1.2; //0 to 2
+    speech.lang = 'en-US';
+  }
+
   const socket = io()
   socket.on('update', (trainee) => {
+    let voiceMessage = 'Results'
     if (document.getElementById(trainee.id)) {
       document.getElementById(trainee.id).outerHTML = buildTraineeBlock(trainee.testResult)
+      voiceMessage += ' updated'
     } else {
       const e = document.createElement('div')
       e.innerHTML = buildTraineeBlock(trainee.testResult, true)
       document.getElementsByClassName('page')[0].appendChild(e.firstElementChild)
+      voiceMessage += ' added'
       setTimeout(()=>{
         const justLoaded = document.getElementsByClassName('transparent')
         ;[].slice.call(justLoaded).forEach((elem)=> {
@@ -39,6 +54,16 @@
         })
       }, 0)
     }
+    const { testResult } = trainee
+    voiceMessage += ` for ${trainee.name}.`
+    voiceMessage += (testResult.numFailedTestSuites === 0 && testResult.numPassedTestSuites > 0)
+      ? ` All test suites passed.`
+      : ` ${testResult.numFailedTestSuites} suites failing.`
+    if (speech){
+      speech.text = voiceMessage
+      speechSynthesis.speak(speech);
+    }
+
   })
 
   const createTestBlocks = type => num => `<div class="block ${type}"></div>`.repeat(num)
@@ -65,6 +90,11 @@
 
   const buildTraineeBlock = (trainee, shouldAnimate) => {
     const animationClass = shouldAnimate ? 'transparent' : ''
+    trainee.failureDetails.sort(function(a, b) {
+      let nameA = a.fileName.toUpperCase();
+      let nameB = b.fileName.toUpperCase();
+      return nameA < nameB ? -1 : 1
+    })
     return `
       <div class="single-trainee ${animationClass}" id="${trainee.id}">
         <h3 class="name">${trainee.name}</h3>

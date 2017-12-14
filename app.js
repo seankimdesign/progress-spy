@@ -60,7 +60,8 @@ let trainees = []
     recalculateRanTime(trainees)
     io.emit('update', {
       id,
-      testResult
+      testResult,
+      name: parsed.author
     })
     res.send('OK')
   })
