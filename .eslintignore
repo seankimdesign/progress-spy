@@ -1,0 +1,4 @@
+webpack.config.js
+*.spec.js
+coverage
+dist
