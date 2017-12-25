@@ -5,8 +5,8 @@ const cookieParser = require('cookie-parser')
 const config = require('./config.json')
 
 const app = express()
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
 
 const USE_PORT = 3000
 
@@ -15,7 +15,6 @@ const txtRecent = 'About a minute ago'
 let trainees = []
 
 ;(() => {
-
   app.use(bodyParser.text())
   app.use(cookieParser())
   app.use('/public', express.static('public'))
@@ -46,8 +45,8 @@ let trainees = []
     const { id } = req.params
     const parsed = JSON.parse(body)
     const testResult = {
-      numPassedTestSuites : parsed.numPassedTestSuites,
-      numFailedTestSuites : parsed.numFailedTestSuites,
+      numPassedTestSuites: parsed.numPassedTestSuites,
+      numFailedTestSuites: parsed.numFailedTestSuites,
       timeRan: parsed.startTime,
       lastRan: txtRecent,
       failureDetails: parseFailure(parsed.testResults.slice()),
@@ -66,21 +65,20 @@ let trainees = []
     res.send('OK')
   })
 
-  http.listen(USE_PORT, ()=>{
+  http.listen(USE_PORT, () => {
     console.log(`Application started on port ${USE_PORT}`)
   })
-
 })()
 
-const getMinutesDifference = (testRan) =>{
+const getMinutesDifference = (testRan) => {
   const now = new Date()
   let difference = Math.floor(Math.abs(now - testRan) / 60000)
   let unit = 'minutes'
-  if (difference > 180){
-    if (difference > 2880){
+  if (difference > 180) {
+    if (difference > 2880) {
       difference = Math.floor(difference / 1440)
       unit = 'days'
-    } else{
+    } else {
       difference = Math.floor(difference / 60)
       unit = 'hours'
     }
@@ -97,8 +95,8 @@ const recalculateRanTime = records => {
 
 const parseFailure = (results) => {
   let output = []
-  results.filter(result => result.status === "failed").forEach(result => {
-    const details = result.assertionResults.filter(test => test.status === "failed").map(test => {
+  results.filter(result => result.status === 'failed').forEach(result => {
+    const details = result.assertionResults.filter(test => test.status === 'failed').map(test => {
       return {
         title: test.title,
         messages: test.failureMessages.map(formatDetails).join('\n\n')
@@ -116,7 +114,7 @@ const parseFailure = (results) => {
 
 const shortenSlash = (str) => {
   let exp = str.split('/')
-  return exp.length < 3 ? str : [exp[exp.length-2],exp[exp.length-1]].join('/')
+  return exp.length < 3 ? str : [exp[exp.length - 2], exp[exp.length - 1]].join('/')
 }
 
 const formatDetails = str => str.replace(/\[\d+m/g, '')

@@ -1,6 +1,7 @@
 /node_modules
+/client/node_modules
 coverage
-public/app.js
+public/app.*
 /.idea
 
 config.json
