@@ -9,8 +9,6 @@ const app = express()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 
-const txtRecent = 'About a minute ago'
-
 let trainees = []
 
 ;(() => {
@@ -20,23 +18,22 @@ let trainees = []
 
   app.set('view engine', 'pug')
 
-  app.get('/', (req, res) => {
-    recalculateRanTime(trainees)
-    res.render('index')
-  })
-
   app.get('/api/trainees', (req, res) => {
     res.json({trainees})
   })
 
-  app.get('/invalidate/:id', (req, res) => {
+  app.post('/invalidate/:id', (req, res) => {
     let { cookies } = req
     let { id } = req.params
     if (cookies.react === config['authorization-cookie']) {
       trainees = trainees.filter(trainee => trainee.id !== id)
-      return res.redirect('/')
+      io.emit(socketMessages.USER_REMOVED, {
+        id
+      })
+      res.send('OK')
+    } else {
+      res.status(401).send('Not authorized to ')
     }
-    res.send('<pre>Cannot GET /invalidate/' + id + '</pre>')
   })
 
   app.post('/update/:id', (req, res) => {
@@ -47,7 +44,6 @@ let trainees = []
       numPassedTestSuites: parsed.numPassedTestSuites,
       numFailedTestSuites: parsed.numFailedTestSuites,
       timeRan: parsed.startTime,
-      lastRan: txtRecent,
       failureDetails: parseFailure(parsed.testResults.slice()),
       id: id,
       name: parsed.author,
@@ -55,13 +51,16 @@ let trainees = []
     }
     let omitted = trainees.filter(trainee => trainee.id !== id)
     trainees = [...omitted, testResult]
-    recalculateRanTime(trainees)
     io.emit(socketMessages.USER_UPDATED, {
       id,
       testResult,
       name: parsed.author
     })
     res.send('OK')
+  })
+
+  app.get('*', (req, res) => {
+    res.render('index')
   })
 
   io.on('connection', socket => {
@@ -72,29 +71,6 @@ let trainees = []
     console.log(`Application started on port ${PORT}`)
   })
 })()
-
-const getMinutesDifference = (testRan) => {
-  const now = new Date()
-  let difference = Math.floor(Math.abs(now - testRan) / 60000)
-  let unit = 'minutes'
-  if (difference > 180) {
-    if (difference > 2880) {
-      difference = Math.floor(difference / 1440)
-      unit = 'days'
-    } else {
-      difference = Math.floor(difference / 60)
-      unit = 'hours'
-    }
-  }
-
-  return difference > 2 ? `${difference} ${unit} ago` : txtRecent
-}
-
-const recalculateRanTime = records => {
-  records.map(record => {
-    record.lastRan = getMinutesDifference(record.timeRan)
-  })
-}
 
 const parseFailure = (results) => {
   let output = []

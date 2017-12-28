@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import BlockContainer from '../BlockContainer'
 import FailureContainer from '../FailureContainer'
+
+import { getTimeDifference } from '../../utils'
 
 const _Trainee = styled.div`
   margin-bottom: 12px;
@@ -30,26 +32,49 @@ const _Small = styled.p`
   font-size: 11px;
 `
 
-const Trainee = ({ name, subname, time, numPasses, numFailures, failureDetails, id }) => {
-  return (
-    <_Trainee>
-      <_Name>{name}</_Name>
-      <_Subname>{subname}</_Subname>
-      <_Small>{time}</_Small>
-      <BlockContainer color={'green'} number={numPasses} />
-      <BlockContainer color={'red'} number={numFailures} />
-      {
-        failureDetails.length !== 0
-          ? (
-            <FailureContainer
-              failureDetails={failureDetails}
-              id={id}
-            />
-          )
-          : null
-      }
-    </_Trainee>
-  )
+class Trainee extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      lastRan: getTimeDifference(props.time)
+    }
+  }
+
+  // Updates lastRan every minute
+  componentDidMount () {
+    this.interval = window.setInterval(() => {
+      this.setState({
+        lastRan: getTimeDifference(this.props.time)
+      })
+    }, 60000)
+  }
+
+  componentWillUnmount () {
+    window.clearInteval(this.interval)
+  }
+
+  render () {
+    const { name, subname, numPasses, numFailures, failureDetails, id } = this.props
+    return (
+      <_Trainee data-id={id}>
+        <_Name>{name}</_Name>
+        <_Subname>{subname}</_Subname>
+        <_Small>{this.state.lastRan}</_Small>
+        <BlockContainer color={'#2ecf68'} number={numPasses} />
+        <BlockContainer color={'#c14'} number={numFailures} />
+        {
+          failureDetails.length !== 0
+            ? (
+              <FailureContainer
+                failureDetails={failureDetails}
+                id={id}
+              />
+            )
+            : null
+        }
+      </_Trainee>
+    )
+  }
 }
 
 export default Trainee

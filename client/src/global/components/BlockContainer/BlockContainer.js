@@ -18,7 +18,7 @@ const _Block = styled.div`
 const BlockContainer = ({ color, number }) => {
   return (
     <_BlockContainer>
-      {Array(number).map((empty, i) => <_Block color={color} key={i} />)}
+      {Array.apply(null, { length: number }).map((empty, i) => <_Block color={color} key={i} />)}
     </_BlockContainer>
   )
 }

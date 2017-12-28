@@ -10,7 +10,7 @@ const defaults = {
   defaultFontSize: 14,
   defaultFontBiggerSize: 16,
   defaultFontSmallerSize: 11,
-  defaultFontFamily: 'sans-serif',
+  defaultFontFamily: `'Open Sans', 'Roboto', sans-serif`,
   defaultFontColor: '#222',
   defaultLineHeight: '1.5em',
   defaultH1Size: 32,

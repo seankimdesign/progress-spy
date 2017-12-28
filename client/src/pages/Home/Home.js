@@ -24,7 +24,7 @@ class Home extends Component {
             subname={trainee.subname}
             time={trainee.timeRan}
             numPasses={trainee.numPassedTestSuites}
-            numFailures={trainee.numPassedTestSuites}
+            numFailures={trainee.numFailedTestSuites}
             failureDetails={trainee.failureDetails}
             id={trainee.id}
             key={trainee.id}

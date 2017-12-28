@@ -9,14 +9,14 @@ const _SingleFailure = styled.div`
 `
 
 const _Button = styled.div`
-  padding: 3px 8px 5px 8px;
+  padding: 3px 8px;
   position: absolute;
   right: 38px;
-  margin-top: 10px;
-  height: 22px;
+  margin-top: 9px;
   font-size: 12px;
   border-radius: 2px;
   background-color: #fbf7f7;
+  color: #333;
   border: 0;
   outline: 0;
   cursor: pointer;
@@ -44,7 +44,7 @@ const _Badge = styled.div`
   margin: 9px 0 0 9px;
 `
 
-const _FailureDetails = styled.div`
+const _FailureDetails = styled.ol`
   padding-bottom: 12px;
 `
 
@@ -61,6 +61,8 @@ const _FileName = styled.p`
 
 const _LongFileName = styled.p`
   margin: 4px 0 0 12px;
+  opacity: 0.5;
+  font-size: 11px;
 `
 
 class SingleFailure extends Component {
@@ -83,11 +85,11 @@ class SingleFailure extends Component {
         <_Button onClick={this.handleClick}>TOGGLE</_Button>
         <_Badge>{this.props.number}</_Badge>
         <_FileName>{this.props.fileName}</_FileName>
-        <_LongFileName>{this.props.longFileName}</_LongFileName>
         {
           this.state.open
-            ? (
-              <_FailureDetails>
+            ? ([
+              <_LongFileName key={1}>{this.props.longFileName}</_LongFileName>,
+              <_FailureDetails key={2}>
                 {this.props.details.map((detail, i) => (
                   <Detail
                     title={detail.title}
@@ -96,7 +98,7 @@ class SingleFailure extends Component {
                   />
                 ))}
               </_FailureDetails>
-            )
+            ])
             : null
         }
       </_SingleFailure>

@@ -1,12 +1,27 @@
 import React from 'react'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
+
+const _Detail = styled.li`
+  border-top: 1px dashed #7a7272;
+  padding-left: 15px;
+  margin-left: -15px;
+  
+  &:first-of-type{
+    border: 0;
+  }
+`
+
+const Title = styled.p`
+  font-size: 15px;
+`
 
 const Detail = ({ title, messages }) => {
   return (
-    <li>
-      <p>{title}</p>
+    <_Detail>
+      <Title>{title}</Title>
       <pre>{messages}</pre>
-    </li>
+    </_Detail>
   )
 }
 

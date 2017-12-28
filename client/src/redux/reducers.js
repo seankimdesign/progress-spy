@@ -11,12 +11,13 @@ const defaultState = {
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case CONNECTION_STARTED:
+    case CONNECTION_STARTED: {
       return {
         ...state,
         trainees: action.payload.trainees
       }
-    case USER_UPDATED:
+    }
+    case USER_UPDATED: {
       const index = state.trainees.findIndex(trainee => trainee.id === action.payload.id)
       const trainees = state.trainees ? [...state.trainees] : []
       if (index === -1) {
@@ -28,10 +29,14 @@ const reducer = (state = defaultState, action) => {
         ...state,
         trainees
       }
-    case USER_REMOVED:
+    }
+    case USER_REMOVED: {
+      const trainees = state.trainees.filter(trainee => trainee.id !== action.payload.id)
       return {
-        ...state
+        ...state,
+        trainees
       }
+    }
     default:
       return state
   }
