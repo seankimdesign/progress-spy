@@ -1,5 +1,6 @@
 import { applyMiddleware, createStore, compose } from 'redux'
 import createSaga from 'redux-saga'
+import speechMiddleWare from './speech'
 
 import reducers from './reducers'
 import sagas from './sagas'
@@ -11,7 +12,10 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
   reducers,
   composeEnhancers(
-    applyMiddleware(sagaMiddleware)
+    applyMiddleware(
+      speechMiddleWare,
+      sagaMiddleware
+    )
   )
 )
 
