@@ -4,7 +4,7 @@
   "description": "Spying on the progress of trainees. So secretive!",
   "main": "app.js",
   "scripts": {
-    "start": "concurrently \"cd client && npm run build\" \"cd ../ && node server/app.js\"",
+    "start": "concurrently \"cd client && npm run build\" \"node server/app.js\"",
     "dev:server": "nodemon server/app.js",
     "dev:client": "cd client && npm run dev",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",

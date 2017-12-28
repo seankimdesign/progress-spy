@@ -69,12 +69,18 @@ class SingleFailure extends Component {
     this.state = {
       open: false
     }
+    this.handleClick = this.handleClick.bind(this)
+  }
+
+  handleClick (e) {
+    e.preventDefault()
+    this.setState(prevState => ({open: !prevState.open}))
   }
 
   render () {
     return (
       <_SingleFailure>
-        <_Button>TOGGLE</_Button>
+        <_Button onClick={this.handleClick}>TOGGLE</_Button>
         <_Badge>{this.props.number}</_Badge>
         <_FileName>{this.props.fileName}</_FileName>
         <_LongFileName>{this.props.longFileName}</_LongFileName>

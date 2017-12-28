@@ -57,7 +57,7 @@ export default Trainee
 Trainee.propTypes = {
   name: PropTypes.string.isRequired,
   subname: PropTypes.string.isRequired,
-  time: PropTypes.string.isRequired,
+  time: PropTypes.number.isRequired,
   numPasses: PropTypes.number.isRequired,
   numFailures: PropTypes.number.isRequired,
   failureDetails: PropTypes.array,

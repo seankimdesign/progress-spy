@@ -3,12 +3,11 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 
 const config = require('./config.json')
+const { PORT, socketMessages } = require('../common/config.js')
 
 const app = express()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
-
-const USE_PORT = 3000
 
 const txtRecent = 'About a minute ago'
 
@@ -57,7 +56,7 @@ let trainees = []
     let omitted = trainees.filter(trainee => trainee.id !== id)
     trainees = [...omitted, testResult]
     recalculateRanTime(trainees)
-    io.emit('update', {
+    io.emit(socketMessages.USER_UPDATED, {
       id,
       testResult,
       name: parsed.author
@@ -65,8 +64,12 @@ let trainees = []
     res.send('OK')
   })
 
-  http.listen(USE_PORT, () => {
-    console.log(`Application started on port ${USE_PORT}`)
+  io.on('connection', socket => {
+    socket.emit(socketMessages.CONNECTION_STARTED, { trainees })
+  })
+
+  http.listen(PORT, () => {
+    console.log(`Application started on port ${PORT}`)
   })
 })()
 

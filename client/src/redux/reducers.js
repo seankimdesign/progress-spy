@@ -1,19 +1,36 @@
-import {
-  FETCH_TRAINEES,
-  FETCH_TRAINEES_SUCCESS,
-  FETCH_TRAINEES_FAILURE
-} from './actions'
+import { socketMessages } from '../../../common/config'
+const {
+  CONNECTION_STARTED,
+  USER_UPDATED,
+  USER_REMOVED
+} = socketMessages
 
 const defaultState = {
-  loading: false
+  trainees: null
 }
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case FETCH_TRAINEES:
+    case CONNECTION_STARTED:
       return {
         ...state,
-        loading: true
+        trainees: action.payload.trainees
+      }
+    case USER_UPDATED:
+      const index = state.trainees.findIndex(trainee => trainee.id === action.payload.id)
+      const trainees = state.trainees ? [...state.trainees] : []
+      if (index === -1) {
+        trainees.push(action.payload.testResult)
+      } else {
+        trainees.splice(index, 1, action.payload.testResult)
+      }
+      return {
+        ...state,
+        trainees
+      }
+    case USER_REMOVED:
+      return {
+        ...state
       }
     default:
       return state
