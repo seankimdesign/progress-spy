@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
-
-import actions from '../../redux/actions'
+import Cookies from 'cookies-js'
+import * as actions from '../../redux/actions'
 
 import Home from './Home'
 
@@ -14,8 +14,11 @@ const sortTrainees = createSelector(
   }
 )
 
+const getDeleteCookie = () => Cookies.get('react') || null
+
 const mapStateToProps = (state, props) => ({
-  trainees: sortTrainees(state, props)
+  trainees: sortTrainees(state, props),
+  deleteCookie: getDeleteCookie()
 })
 
 export default connect(mapStateToProps, actions)(Home)

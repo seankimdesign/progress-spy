@@ -2,11 +2,13 @@ import { socketMessages } from '../../../common/config'
 const {
   CONNECTION_STARTED,
   USER_UPDATED,
-  USER_REMOVED
+  USER_REMOVE_SUCCESS,
+  USER_REMOVE_FAILURE
 } = socketMessages
 
 const defaultState = {
-  trainees: null
+  trainees: null,
+  message: null
 }
 
 const reducer = (state = defaultState, action) => {
@@ -30,11 +32,18 @@ const reducer = (state = defaultState, action) => {
         trainees
       }
     }
-    case USER_REMOVED: {
+    case USER_REMOVE_SUCCESS: {
       const trainees = state.trainees.filter(trainee => trainee.id !== action.payload.id)
       return {
         ...state,
-        trainees
+        trainees,
+        message: 'User Removed successfully'
+      }
+    }
+    case USER_REMOVE_FAILURE: {
+      return {
+        ...state,
+        message: 'Insufficient Permissions'
       }
     }
     default:

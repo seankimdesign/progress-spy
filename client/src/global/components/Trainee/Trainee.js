@@ -32,12 +32,39 @@ const _Small = styled.p`
   font-size: 11px;
 `
 
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const ButtonContainer = styled.div`
+  padding: 0 20px;
+`
+
+const Button = styled.button`
+  padding: 3px 8px;
+  margin-top: 9px;
+  font-size: 12px;
+  border-radius: 2px;
+  background-color: #fbf7f7;
+  color: #333;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+
+  &:hover{
+    background-color: #fff;
+  }
+`
+
 class Trainee extends Component {
   constructor (props) {
     super(props)
     this.state = {
       lastRan: getTimeDifference(props.time)
     }
+
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   // Updates lastRan every minute
@@ -50,7 +77,21 @@ class Trainee extends Component {
   }
 
   componentWillUnmount () {
-    window.clearInteval(this.interval)
+    window.clearInterval(this.interval)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.time !== nextProps.time) {
+      this.setState({
+        lastRan: getTimeDifference(this.props.time)
+      })
+    }
+  }
+
+  handleDelete (e) {
+    const { id, deleteCookie, deleteUser } = this.props
+    e.preventDefault()
+    deleteUser({ id, deleteCookie })
   }
 
   render () {
@@ -60,8 +101,15 @@ class Trainee extends Component {
         <_Name>{name}</_Name>
         <_Subname>{subname}</_Subname>
         <_Small>{this.state.lastRan}</_Small>
-        <BlockContainer color={'#2ecf68'} number={numPasses} />
-        <BlockContainer color={'#c14'} number={numFailures} />
+        <Row>
+          <div>
+            <BlockContainer color={'#2ecf68'} number={numPasses} />
+            <BlockContainer color={'#c14'} number={numFailures} />
+          </div>
+          <ButtonContainer>
+            <Button onClick={this.handleDelete}>DELETE</Button>
+          </ButtonContainer>
+        </Row>
         {
           failureDetails.length !== 0
             ? (
@@ -86,5 +134,7 @@ Trainee.propTypes = {
   numPasses: PropTypes.number.isRequired,
   numFailures: PropTypes.number.isRequired,
   failureDetails: PropTypes.array,
-  id: PropTypes.string
+  id: PropTypes.string,
+  deleteUser: PropTypes.func,
+  deleteCookie: PropTypes.any
 }

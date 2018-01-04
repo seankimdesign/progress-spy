@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Trainee } from 'globalComponents'
 
-const Home = ({ trainees }) => {
+const Home = ({ trainees, deleteUser, deleteCookie }) => {
   return (
     <div>
       {trainees && trainees.map(trainee => (
@@ -15,6 +15,8 @@ const Home = ({ trainees }) => {
           failureDetails={trainee.failureDetails}
           id={trainee.id}
           key={trainee.id}
+          deleteUser={deleteUser}
+          deleteCookie={deleteCookie}
         />
       ))}
     </div>
@@ -24,5 +26,7 @@ const Home = ({ trainees }) => {
 export default Home
 
 Home.propTypes = {
-  trainees: PropTypes.array
+  trainees: PropTypes.array,
+  deleteUser: PropTypes.func,
+  deleteCookie: PropTypes.any
 }

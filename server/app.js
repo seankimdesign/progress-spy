@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 
 const config = require('./config.json')
-const { PORT, socketMessages } = require('../common/config.js')
+const { PORT, socketMessages, clientMessages } = require('../common/config.js')
 
 const app = express()
 const http = require('http').Server(app)
@@ -18,24 +18,6 @@ let trainees = []
 
   app.set('view engine', 'pug')
 
-  app.get('/api/trainees', (req, res) => {
-    res.json({trainees})
-  })
-
-  app.post('/invalidate/:id', (req, res) => {
-    let { cookies } = req
-    let { id } = req.params
-    if (cookies.react === config['authorization-cookie']) {
-      trainees = trainees.filter(trainee => trainee.id !== id)
-      io.emit(socketMessages.USER_REMOVED, {
-        id
-      })
-      res.send('OK')
-    } else {
-      res.status(401).send('Not authorized to ')
-    }
-  })
-
   app.post('/update/:id', (req, res) => {
     const { body } = req
     const { id } = req.params
@@ -45,7 +27,7 @@ let trainees = []
       numFailedTestSuites: parsed.numFailedTestSuites,
       timeRan: parsed.startTime,
       failureDetails: parseFailure(parsed.testResults.slice()),
-      id: id,
+      id,
       name: parsed.author,
       subname: `[ ${parsed.hostname}  |  ${parsed.homedir} ]`
     }
@@ -65,6 +47,16 @@ let trainees = []
 
   io.on('connection', socket => {
     socket.emit(socketMessages.CONNECTION_STARTED, { trainees })
+
+    socket.on(clientMessages.DELETE_USER, (msg) => {
+      const { deleteCookie, id } = msg
+      if (deleteCookie === config['authorization-cookie']) {
+        trainees = trainees.filter(trainee => trainee.id !== id)
+        io.emit(socketMessages.USER_REMOVE_SUCCESS, { id })
+      } else {
+        io.emit(socketMessages.USER_REMOVE_FAILURE)
+      }
+    })
   })
 
   http.listen(PORT, () => {
@@ -73,22 +65,23 @@ let trainees = []
 })()
 
 const parseFailure = (results) => {
-  let output = []
-  results.filter(result => result.status === 'failed').forEach(result => {
-    const details = result.assertionResults.filter(test => test.status === 'failed').map(test => {
+  return results
+    .filter(result => result.status === 'failed')
+    .map(result => {
+      const details = result.assertionResults
+        .filter(test => test.status === 'failed')
+        .map(test => ({
+          title: test.title,
+          messages: test.failureMessages.map(formatDetails).join('\n\n')
+        }))
+
       return {
-        title: test.title,
-        messages: test.failureMessages.map(formatDetails).join('\n\n')
+        fileName: shortenSlash(result.name),
+        longFileName: result.name,
+        message: result.message,
+        details
       }
     })
-    output.push({
-      fileName: shortenSlash(result.name),
-      longFileName: result.name,
-      message: result.message,
-      details: details
-    })
-  })
-  return output
 }
 
 const shortenSlash = (str) => {

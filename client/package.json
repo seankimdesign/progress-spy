@@ -29,6 +29,7 @@
   "license": "ISC",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "cookies-js": "^1.2.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",

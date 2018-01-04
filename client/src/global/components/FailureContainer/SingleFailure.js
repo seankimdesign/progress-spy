@@ -55,7 +55,7 @@ const _FileName = styled.p`
   background-color: #282424;
   color: white;
   min-width: 900px;
-  width: calc(100% - 54px);
+  width: 100%;
   letter-spacing: 0.05em;
 `
 
