@@ -15,10 +15,12 @@ const sortTrainees = createSelector(
 )
 
 const getDeleteCookie = () => Cookies.get('react') || null
+const getViewCookie = () => Cookies.get('view') === 'magic'
 
 const mapStateToProps = (state, props) => ({
   trainees: sortTrainees(state, props),
-  deleteCookie: getDeleteCookie()
+  deleteCookie: getDeleteCookie(),
+  viewable: getViewCookie()
 })
 
 export default connect(mapStateToProps, actions)(Home)

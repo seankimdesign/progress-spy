@@ -2,7 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Trainee } from 'globalComponents'
 
-const Home = ({ trainees, deleteUser, deleteCookie }) => {
+const Home = ({ trainees, deleteUser, deleteCookie, viewable }) => {
+  if (!viewable) { return <div>You are not authorized to view this page!</div> }
+
   return (
     <div>
       {trainees && trainees.map(trainee => (
@@ -28,5 +30,6 @@ export default Home
 Home.propTypes = {
   trainees: PropTypes.array,
   deleteUser: PropTypes.func,
-  deleteCookie: PropTypes.any
+  deleteCookie: PropTypes.any,
+  viewable: PropTypes.bool
 }
