@@ -1,12 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Trainee } from 'globalComponents'
+import styled from 'styled-components'
 
-const Home = ({ trainees, deleteUser, deleteCookie, viewable }) => {
-  if (!viewable) { return <div>You are not authorized to view this page!</div> }
+import { Trainee, TempMessage } from 'globalComponents'
+
+const UnauthorizedText = styled.div`
+  text-align: center;
+  color: #c14;
+  font-weight: bold;
+  font-size: 20px;
+`
+
+const Home = ({ trainees, deleteUser, deleteCookie, viewable, message, resetMessage }) => {
+  if (!viewable) { return <UnauthorizedText>You are not authorized to view this page!</UnauthorizedText> }
 
   return (
     <div>
+      {message && (
+        <TempMessage dismissAction={resetMessage}>
+          {message}
+        </TempMessage>
+      )}
+
       {trainees && trainees.map(trainee => (
         <Trainee
           name={trainee.name}
@@ -31,5 +46,7 @@ Home.propTypes = {
   trainees: PropTypes.array,
   deleteUser: PropTypes.func,
   deleteCookie: PropTypes.any,
-  viewable: PropTypes.bool
+  viewable: PropTypes.bool,
+  message: PropTypes.string,
+  resetMessage: PropTypes.func
 }

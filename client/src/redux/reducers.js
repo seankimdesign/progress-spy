@@ -1,3 +1,4 @@
+import { RESET_MESSAGE } from './actions'
 import { socketMessages } from '../../../common/config'
 const {
   CONNECTION_STARTED,
@@ -44,6 +45,12 @@ const reducer = (state = defaultState, action) => {
       return {
         ...state,
         message: 'Insufficient Permissions'
+      }
+    }
+    case RESET_MESSAGE: {
+      return {
+        ...state,
+        message: null
       }
     }
     default:

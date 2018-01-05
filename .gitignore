@@ -4,4 +4,4 @@ coverage
 public/app.*
 /.idea
 .vscode
-config.json
+# config.json

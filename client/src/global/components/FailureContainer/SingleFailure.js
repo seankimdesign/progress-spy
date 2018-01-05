@@ -54,8 +54,6 @@ const _FileName = styled.p`
   padding: 12px 12px 12px 42px;
   background-color: #282424;
   color: white;
-  min-width: 900px;
-  width: 100%;
   letter-spacing: 0.05em;
 `
 

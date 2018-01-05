@@ -42,7 +42,12 @@ let trainees = []
   })
 
   app.get('*', (req, res) => {
-    res.render('index')
+    const { cookies } = req
+    if (cookies.auth === config['authorization-cookie']) {
+      res.render('index')
+    } else {
+      res.sendStatus(401)
+    }
   })
 
   io.on('connection', socket => {
@@ -50,7 +55,7 @@ let trainees = []
 
     socket.on(clientMessages.DELETE_USER, (msg) => {
       const { deleteCookie, id } = msg
-      if (deleteCookie === config['authorization-cookie']) {
+      if (deleteCookie === config['authorization-delete-cookie']) {
         trainees = trainees.filter(trainee => trainee.id !== id)
         io.emit(socketMessages.USER_REMOVE_SUCCESS, { id })
       } else {

@@ -20,7 +20,8 @@ const getViewCookie = () => Cookies.get('view') === 'magic'
 const mapStateToProps = (state, props) => ({
   trainees: sortTrainees(state, props),
   deleteCookie: getDeleteCookie(),
-  viewable: getViewCookie()
+  viewable: getViewCookie(),
+  message: state.message
 })
 
 export default connect(mapStateToProps, actions)(Home)
