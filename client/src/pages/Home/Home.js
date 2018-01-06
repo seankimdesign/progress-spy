@@ -1,24 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import { Trainee, TempMessage } from 'globalComponents'
 
-const UnauthorizedText = styled.div`
-  text-align: center;
-  color: #c14;
-  font-weight: bold;
-  font-size: 20px;
-`
-
-const Home = ({ trainees, deleteUser, deleteCookie, viewable, message, resetMessage }) => {
-  if (!viewable) { return <UnauthorizedText>You are not authorized to view this page!</UnauthorizedText> }
-
+const Home = ({ trainees, deleteUser, deleteCookie, message, resetMessage }) => {
   return (
     <div>
       {message && (
-        <TempMessage dismissAction={resetMessage}>
-          {message}
+        <TempMessage type={message.type} dismissAction={resetMessage}>
+          {message.msg}
         </TempMessage>
       )}
 
@@ -46,7 +36,6 @@ Home.propTypes = {
   trainees: PropTypes.array,
   deleteUser: PropTypes.func,
   deleteCookie: PropTypes.any,
-  viewable: PropTypes.bool,
-  message: PropTypes.string,
+  message: PropTypes.object,
   resetMessage: PropTypes.func
 }

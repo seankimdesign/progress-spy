@@ -38,13 +38,19 @@ const reducer = (state = defaultState, action) => {
       return {
         ...state,
         trainees,
-        message: 'User Removed successfully'
+        message: {
+          msg: 'User Removed successfully',
+          type: 'success'
+        }
       }
     }
     case USER_REMOVE_FAILURE: {
       return {
         ...state,
-        message: 'Insufficient Permissions'
+        message: {
+          msg: 'Insufficient Permissions',
+          type: 'failure'
+        }
       }
     }
     case RESET_MESSAGE: {

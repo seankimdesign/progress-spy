@@ -8,6 +8,10 @@ import { Banner } from '../global/components'
 import Home from '../pages/Home'
 
 injectGlobal`
+  html, body {
+    font-family: ${_.defaultFontFamily};
+  }
+
   body {
     padding: 0;
     margin: 0;

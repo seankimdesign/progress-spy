@@ -43,7 +43,7 @@ let trainees = []
 
   app.get('*', (req, res) => {
     const { cookies } = req
-    if (cookies.auth === config['authorization-cookie']) {
+    if (cookies.viewPage === config['authorization-cookie']) {
       res.render('index')
     } else {
       res.sendStatus(401)
