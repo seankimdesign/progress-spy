@@ -1,5 +1,7 @@
 /node_modules
-
+/client/node_modules
+coverage
+public/app.*
 /.idea
-
-config.json
+.vscode
+server/config.json

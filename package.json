@@ -4,7 +4,15 @@
   "description": "Spying on the progress of trainees. So secretive!",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently \"cd client && npm run build\" \"node server/app.js\"",
+    "dev:server": "nodemon server/app.js",
+    "dev:client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "test": "cd client &&  npm run test",
+    "test:debug": "cd client && npm run test:debug",
+    "test:watch": "cd client && npm run test:watch",
+    "test:coverage": "cd client && npm run test:coverage",
+    "lint": "cd client && npm run lint"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +22,9 @@
     "express": "^4.16.2",
     "pug": "^2.0.0-rc.4",
     "socket.io": "^2.0.4"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "nodemon": "^1.14.3"
   }
 }
